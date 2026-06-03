@@ -26,6 +26,10 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
+  if (pathname.startsWith('/dashboard/website')) {
+    return NextResponse.redirect(new URL('/dashboard', request.url));
+  }
+
 const ROUTE_PERMISSIONS = [
   { path: '/dashboard/clients', permission: 'client.view' },
   { path: '/dashboard/staff', permission: 'staff.view' },
@@ -36,7 +40,6 @@ const ROUTE_PERMISSIONS = [
   { path: '/dashboard/transactions', permission: 'transactions.view' },
   { path: '/dashboard/payment-management', permission: 'payment.view' },
   { path: '/dashboard/help', permission: 'help.view' },
-  { path: '/dashboard/website', permission: 'website_management.view' },
   { path: '/dashboard/events/create', permission: 'event.create' },
   { path: '/dashboard/events', permission: 'event.view' },
   { path: '/dashboard/settings/config', permission: 'settings.edit' },

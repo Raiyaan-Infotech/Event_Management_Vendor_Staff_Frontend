@@ -30,7 +30,7 @@ import Image from "next/image";
 
 
 interface ChildItem { label: string; href: string; icon: LucideIcon; permission?: string; }
-interface NavItem { label: string; href?: string; icon: LucideIcon; children?: ChildItem[]; permission?: string; }
+interface NavItem { label: string; href?: string; icon: LucideIcon; children?: ChildItem[]; permission?: string; hidden?: boolean; }
 
 const NAV_ITEMS: NavItem[] = [
   {
@@ -65,41 +65,6 @@ const NAV_ITEMS: NavItem[] = [
     ],
   },
   { label: "Payment", href: "/dashboard/payment-management", icon: DollarSign, permission: "payment.view" },
-  {
-    label: "Settings",
-    icon: Settings,
-    permission: "settings.view",
-    children: [
-      { label: "Roles",            href: "/dashboard/roles",             icon: ShieldCheck,    permission: "roles.view" },
-      { label: "Modules",          href: "/dashboard/modules",           icon: Layers2,        permission: "modules.view" },
-      { label: "Payment Settings", href: "/dashboard/settings/payments", icon: CreditCard,     permission: "settings.view" },
-      { label: "Configuration",    href: "/dashboard/settings/config",   icon: SlidersHorizontal, permission: "settings.edit" },
-      { label: "Currency",         href: "/dashboard/settings/currency", icon: DollarSign,     permission: "settings.edit" },
-      { label: "Timezone",         href: "/dashboard/settings/timezone", icon: Clock,          permission: "settings.edit" },
-      { label: "Activity Log",     href: "/dashboard/activity-log",      icon: ClipboardList,  permission: "settings.view" },
-    ],
-  },
-  { label: "Help",               href: "/dashboard/help",    icon: HelpCircle, permission: "help.view" },
-  // { label: "Website Management", href: "/dashboard/website", icon: Globe,       },
-  {
-    label: "Website Management",
-    icon: Globe,
-    permission: "website_management.view",
-    children: [
-      { label: "About Company",  href: "/dashboard/website/about-company",           icon: Building2  },
-      { label: "Pages",          href: "/dashboard/website/pages",                   icon: List       },
-      { label: "Menu",           href: "/dashboard/website/menu",                    icon: List       },
-      { label: "Home",           href: "/dashboard/website/home",                    icon: Home       },
-      { label: "Home Slider",    href: "/dashboard/website/home-slider",             icon: Sliders    },
-      { label: "Gallery",        href: "/dashboard/website/gallery",                 icon: Images     },
-      { label: "Portfolio",      href: "/dashboard/website/portfolio-management",    icon: Briefcase  },
-      { label: "Events",         href: "/dashboard/website/events-management",       icon: Calendar   },
-      { label: "Subscription",   href: "/dashboard/website/subscription-management", icon: CreditCard },
-      { label: "Testimonial",    href: "/dashboard/website/testimonial-management",  icon: Star       },
-      { label: "Contact Us",     href: "/dashboard/website/contact-us-management",   icon: Mail       },
-      { label: "Footer",         href: "/dashboard/website/footer",                  icon: Layers     },
-    ],
-  },
 ];
 
 function isItemActive(item: NavItem, pathname: string): boolean {
@@ -125,7 +90,7 @@ export function StaffSidebar({ ...props }: React.ComponentProps<typeof Sidebar>)
 
   const filteredNavItems = React.useMemo(() => {
     if (!staff?.role) return NAV_ITEMS.filter((item) => item.label === "Dashboard");
-    return NAV_ITEMS.filter((item) => {
+    return NAV_ITEMS.filter((item) => !item.hidden).filter((item) => {
       if (!item.permission) return true;
       return staffPermissions.has(item.permission);
     }).map((item) => {
